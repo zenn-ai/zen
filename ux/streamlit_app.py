@@ -39,7 +39,7 @@ nav_bar = option_menu(
 
 # Welcome Page
 if nav_bar=='Welcome':
-    st.image(Image.open('C:/Users/Danil/Desktop/School/UChicago/Classes/Capstone/welc_img.png'))
+    st.image(Image.open('C:/Users/Danil/Documents/GitHub/therapy-bot/ux/welc_img.png'))
 
 # Chatbot Page
 if nav_bar=='Zen Chatbot':
