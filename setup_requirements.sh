@@ -15,7 +15,9 @@ conda create -n py310 python=3.10 -y && \
         tensorboard==2.12.2 \
         langchain==0.0.154 \
         sentence_transformers==2.2.2 \
-        unstructured==0.6.2 && \
+        unstructured==0.6.2 \
+        deepspeed==0.9.2 && \
+    pip install flash_attn && \
     pip install git+https://github.com/huggingface/peft.git && \
     pip install git+https://github.com/huggingface/transformers.git && \
     python -m ipykernel install --user --name py310 --display-name "Python (3.10)"
