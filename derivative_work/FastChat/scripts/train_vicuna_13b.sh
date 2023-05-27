@@ -1,0 +1,24 @@
+python /home/jupyter/FastChat/fastchat/train/train_lora.py \
+    --model_name_or_path "openaccess-ai-collective/wizard-mega-13b"  \
+    --data_path /home/jupyter/therapy-bot/data/prompts.json \
+    --fp16 True \
+    --output_dir output_13b \
+    --num_train_epochs 3 \
+    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 32 \
+    --gradient_accumulation_steps 4 \
+    --evaluation_strategy "steps" \
+    --eval_steps 10 \
+    --save_strategy "steps" \
+    --save_steps 10 \
+    --save_total_limit 8 \
+    --learning_rate 2e-5 \
+    --weight_decay 0. \
+    --warmup_ratio 0.04 \
+    --lr_scheduler_type "cosine" \
+    --logging_steps 1 \
+    --tf32 False \
+    --model_max_length 2048 \
+    --gradient_checkpointing True \
+    --lazy_preprocess True
+
