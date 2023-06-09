@@ -1,4 +1,4 @@
-# therapy-bot
+# therapy-AI-bot
 
 Despite the increasing societal acceptance of mental health, it continues to be a pressing issue, especially amongst the youth
 
