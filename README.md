@@ -1,6 +1,6 @@
 # therapy-bot
 
-Despite the increasing societal acceptance of mental health, it continues to be a pressing issue, especially for youth populations
+Despite the increasing societal acceptance of mental health, it continues to be a pressing issue, especially amongst the youth
 
 Zen is a therapy bot customized for youth population (ages 15-24)
 
