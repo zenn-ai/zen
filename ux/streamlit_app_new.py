@@ -1,6 +1,4 @@
 import streamlit as st
-from streamlit_chat import message
-from streamlit_option_menu import option_menu
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import pandas as pd
 from PIL import Image
@@ -50,15 +48,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Option_Menu Navigation Bar
-nav_bar = option_menu(
-    menu_title=None,
-    options=['Welcome','Zen Chatbot','Chat History',],
-    orientation='horizontal',
-)
+#navigation Tabs
+tab1, tab2, tab3 = st.tabs(["Welcome", "Zen Chatbot", "Chat History"])
+
 
 # Welcome Page
-if nav_bar=='Welcome':
+with tab1:
     st.image(Image.open('C:/Users/Danil/Documents/GitHub/therapy-bot/ux/welc_img.png'))
     if is_user_authenticated():
         st.write(f"Welcome back, {st.session_state['current_user']}!")
@@ -91,7 +86,7 @@ if nav_bar=='Welcome':
                 st.success(f"User {new_username} has been successfully registered!")
 
 # Chatbot Page
-if nav_bar == 'Zen Chatbot':
+with tab2:
     if is_user_authenticated():
         st.markdown(f'''
         # Conversation with Zen 🌷
@@ -120,7 +115,7 @@ if nav_bar == 'Zen Chatbot':
                 for msg in st.session_state['user_messages'][current_user]:
                     st.write(f"**You**: {msg['User']}")
                     st.write(f"**Zen**: {msg['Zen']}")
-
+        
         # Sidebar contents
         with st.sidebar:
             st.title('💾 Conversation Export Options')
