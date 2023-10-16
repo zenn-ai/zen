@@ -1,0 +1,13 @@
+transformers==4.33.1
+datasets==2.14.5
+accelerate==0.22.0
+evaluate==0.4.0
+peft==0.5.0
+deepspeed==0.10.3
+ninja==1.11.1.1
+tensorboard==2.14.1
+packaging
+mpi4py==3.1.5
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch
+sentencepiece
