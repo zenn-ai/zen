@@ -252,6 +252,10 @@
 
 
 
+########################################################TEST3########################################################
+
+
+
 import streamlit as st
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import pandas as pd
@@ -371,16 +375,21 @@ with tab2:
                     st.write(f"**Zen**: {msg['Zen']}")
         
         # Sidebar contents
-        with st.sidebar:
-            st.title('💾 Conversation Export Options')
-            df_history = pd.DataFrame(st.session_state['user_messages'][current_user])
-            csv = df_history.to_csv(index=False)
-            if st.download_button("Download Conversation History as CSV", csv, 'conversation_history.csv'):
-                st.balloons()
+        if tab2:
+            with st.sidebar:
+                st.title('💾 Conversation Export Options')
+                df_history = pd.DataFrame(st.session_state['user_messages'][current_user])
+                csv = df_history.to_csv(index=False)
+                if st.download_button("Download Conversation History as CSV", csv, 'conversation_history.csv'):
+                    st.balloons()
 
-            json_str = df_history.to_json(orient='records')
-            if st.download_button("Download Conversation History as JSON", json_str, 'conversation_history.json'):
-                st.balloons()
+                json_str = df_history.to_json(orient='records')
+                if st.download_button("Download Conversation History as JSON", json_str, 'conversation_history.json'):
+                    st.balloons()
+        else:
+            st.sidebar.empty()
 
     else:
         st.warning("Please login to interact with Zen 🌷.")
+
+
