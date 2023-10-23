@@ -1,4 +1,5 @@
-<img align = "left" width="75" alt="logo" src="https://github.com/zenn-ai/therapy-bot/blob/main/ux/zenai.png"> 
+<img align = "left" width="75" alt="logo" src="https://github.com/zenn-ai/therapy-bot/blob/main/ux/ZenAI-logos_black.png.png"> 
+
 
 ## Mental health support at your fingertips
 
