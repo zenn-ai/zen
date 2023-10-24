@@ -1,4 +1,5 @@
-# ZenAI: Mental health support at your fingertips <img width="250" align = "right" alt="image" src="https://github.com/zenn-ai/therapy-bot/blob/main/ux/ZenAI-logos_black.png"> 
+# ZenAI: Mental health support at your fingertips
+<img width="220" align = "right" alt="image" src="https://github.com/zenn-ai/therapy-bot/blob/main/ux/ZenAI-logos_black.png"> 
 
 ### Motivation
 
