@@ -36,13 +36,14 @@
 * Additional details to come.
 
 In order to test our PaLM 2 based intent-detection model, we tested it against 30 prompts (with the assistance of ChatGPT). The results are shown below and highlight that our model performs quite well.
+
 <img width="413" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1b43f3cc-dcca-4df5-88d2-3179a39a191d">
 
 
 ### User experience <a name="ux"></a>
 * Additional details to come.
 
-### Key risks & future work <a name="future"></a>
+### Key risks & future work <a name="risks"></a>
 <img width="828" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1294b4cf-f7fa-4586-b099-802c823f2d8a">
 
 
