@@ -24,6 +24,8 @@
 
 <img width="837" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/8105b260-4451-4099-8d8f-b0779c32f587">
 
+Data and code for preparing the data code be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/data).
+
 ### Model training <a name="training"></a>
 * Additional details to come.
 * Model training code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/train).
@@ -32,16 +34,18 @@
 
 <img width="826" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/48564017-25c0-4e7d-8b80-52b3ccd47334">
 
+Model inference code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/inference).
+
 ### Model testing <a name="testing"></a>
 * Additional details to come.
 
-In order to test our PaLM 2 based intent-detection model, we tested it against 30 prompts (with the assistance of ChatGPT). The results are shown below and highlight that our model performs quite well.
+In order to test our PaLM 2 based intent-detection model, we tested it against 30 prompts (with the assistance of ChatGPT). The results are shown below and highlight that our model performs quite well. Supporting code can be found [here](https://github.com/zenn-ai/therapy-bot/blob/main/inference/bison_intent.ipynb).
 
 <img width="413" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1b43f3cc-dcca-4df5-88d2-3179a39a191d">
 
-
 ### User experience <a name="ux"></a>
 * Additional details to come.
+* Insert link to UX
 
 ### Key risks & future work <a name="risks"></a>
 <img width="828" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1294b4cf-f7fa-4586-b099-802c823f2d8a">
