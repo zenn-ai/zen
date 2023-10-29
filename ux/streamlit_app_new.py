@@ -1,10 +1,11 @@
+
 import streamlit as st
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import pandas as pd
 from PIL import Image
 
 # Load pre-trained model and tokenizer
-model_name = "gpt2-medium"
+model_name = "distilgpt2"
 model = GPT2LMHeadModel.from_pretrained(model_name)
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
@@ -88,45 +89,47 @@ with tab1:
 # Chatbot Page
 with tab2:
     if is_user_authenticated():
-        st.markdown(f'''
-        # Conversation with Zen 🌷
-        ---''')
-        
-        input_container = st.container()
-        response_container = st.container()
-        
-        current_user = st.session_state['current_user']
-        
-        # Ensure the messages for the logged-in user are initialized
-        if current_user not in st.session_state['user_messages']:
-            st.session_state['user_messages'][current_user] = []
-        
-        with input_container:
-            user_input = st.text_input("💬 Chat Input: ", "", key="input")
-            submit_button = st.button("Submit")
-            st.divider()
+        if "start_chatting" not in st.session_state or not st.session_state["start_chatting"]:
+            if st.button("Start Chatting"):
+                st.session_state["start_chatting"] = True
+        else:
+            st.markdown(f'''
+            # Conversation with Zen 🌷
+            ---''')
 
-        with response_container:
-            if submit_button and user_input:
-                response = generate_response(user_input)
-                st.session_state['user_messages'][current_user].append({'User': user_input, 'Zen': response})
+            chat_container = st.container()
 
-            if current_user in st.session_state['user_messages']:
-                for msg in st.session_state['user_messages'][current_user]:
-                    st.write(f"**You**: {msg['User']}")
-                    st.write(f"**Zen**: {msg['Zen']}")
-        
-        # Sidebar contents
-        with st.sidebar:
-            st.title('💾 Conversation Export Options')
-            df_history = pd.DataFrame(st.session_state['user_messages'][current_user])
-            csv = df_history.to_csv(index=False)
-            if st.download_button("Download Conversation History as CSV", csv, 'conversation_history.csv'):
-                st.balloons()
+            with chat_container:
+                current_user = st.session_state['current_user']
 
-            json_str = df_history.to_json(orient='records')
-            if st.download_button("Download Conversation History as JSON", json_str, 'conversation_history.json'):
-                st.balloons()
+                # Ensure the messages for the logged-in user are initialized
+                if current_user not in st.session_state['user_messages']:
+                    st.session_state['user_messages'][current_user] = []
+
+                # Display the chat history
+                for msg in st.session_state['user_messages'].get(current_user, []):
+                    st.markdown(f"<div style='background-color: #e1f5fe; padding: 10px; border-radius: 5px; margin: 5px 0;'>👤: {msg['User']}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background-color: #c8e6c9; padding: 10px; border-radius: 5px; margin: 5px 0;'>🌷: {msg['Zen']}</div>", unsafe_allow_html=True)
+
+                # User input bar positioned beneath the chat history
+                user_input = st.text_input("", "", key="input")
+                submit_button = st.button("Submit")
+
+                # Generate and append the bot's response
+                if submit_button and user_input:
+                    response = generate_response(user_input)
+                    st.session_state['user_messages'][current_user].append({'User': user_input, 'Zen': response})
+
+            with st.sidebar:
+                st.title('💾 Conversation Export Options')
+                df_history = pd.DataFrame(st.session_state['user_messages'][current_user])
+                csv = df_history.to_csv(index=False)
+                if st.download_button("Download Conversation History as CSV", csv, 'conversation_history.csv'):
+                    st.balloons()
+                json_str = df_history.to_json(orient='records')
+                if st.download_button("Download Conversation History as JSON", json_str, 'conversation_history.json'):
+                    st.balloons()
+                clear_button = st.sidebar.button('Clear Conversation',key='clear')
 
     else:
         st.warning("Please login to interact with Zen 🌷.")

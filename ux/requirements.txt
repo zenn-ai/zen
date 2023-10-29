@@ -3,4 +3,3 @@ transformers
 protobuf==3.20.0
 accelerate==0.20.3
 pandas
-PIL
