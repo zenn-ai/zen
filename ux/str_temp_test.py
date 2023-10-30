@@ -24,7 +24,7 @@ auth = firebase.auth()
 db = firebase.database()
 storage = firebase.storage()
 with st.sidebar:
-    st.image(Image.open('ux/ZenAI-logos/ZenAI-logos_white.png'))
+    st.image(Image.open('ZenAI-logos/ZenAI-logos_white.png'))
 
     # Authentication
     choice = st.sidebar.selectbox('login/Signup', ['Login', 'Sign up'])
