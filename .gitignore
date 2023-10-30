@@ -1,4 +1,6 @@
 experiment*
+saved_conversations
+models
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
