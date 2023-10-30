@@ -3,8 +3,12 @@ import pyrebase
 import streamlit as st
 from collections import defaultdict
 from datetime import datetime
+<<<<<<< HEAD
 import time
 import random
+=======
+from PIL import Image
+>>>>>>> d77855e4adc8a9f75f0aa74dc98da10187cced46
 
 # Configuration Key
 firebaseConfig = {
@@ -21,7 +25,8 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 storage = firebase.storage()
-st.sidebar.title("Our community app")
+with st.sidebar():
+    st.image(Image.open('ZenAI-logos/ZenAI-logos_white.png'))
 
 # Authentication
 choice = st.sidebar.selectbox('login/Signup', ['Login', 'Sign up'])
