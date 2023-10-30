@@ -20,7 +20,6 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
-storage = firebase.storage()
 
 image_url = "https://i.ibb.co/L13FCzp/Zen-AI-logos.jpg"
 st.sidebar.image(image_url, use_column_width=True)
@@ -37,7 +36,7 @@ def send_message(user_id, message, sender):
     message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
     db.child(user_id).child("Messages").push(message_data)
 
-# Fetch chat history from Firebase and sort in descending order of timestamp
+# Fetch Conversation History from Firebase and sort in descending order of timestamp
 def get_chat_history(user_id):
     messages = db.child(user_id).child("Messages").get()
     chat_history = [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
@@ -88,14 +87,14 @@ if choice == 'Login':
     if login:
         user = auth.sign_in_with_email_and_password(email, password)
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-        tab = st.radio('Go to', ['Chatbot', 'Chat History'])
+        tab = st.radio('Go to', ['Chat', 'Conversation History'])
 
-        if tab == 'Chatbot':
-            st.title('Chat with our Bot')
+        if tab == 'Chat':
+            st.title('Chat with Zen')
             handle_chat_input_with_st_chat_message(user['localId'])
 
-        elif tab == 'Chat History':
-            st.title('Your Chat History')
+        elif tab == 'Conversation History':
+            st.title('Your Conversation History')
             chat_history = get_chat_history(user['localId'])
             dates = sorted(set([message['timestamp'].split(" ")[0] for message in chat_history]), reverse=True)
             for date in dates:
