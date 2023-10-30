@@ -19,7 +19,8 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 storage = firebase.storage()
-st.sidebar.title("Our community app")
+with st.sidebar():
+    st.image(Image.open('ZenAI-logos/ZenAI-logos_white.png'))
 
 # Authentication
 choice = st.sidebar.selectbox('login/Signup', ['Login', 'Sign up'])
