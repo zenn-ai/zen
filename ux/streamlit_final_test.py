@@ -21,7 +21,9 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 storage = firebase.storage()
-st.sidebar.title("Our community app")
+
+image_url = "https://i.ibb.co/L13FCzp/Zen-AI-logos.jpg"
+st.sidebar.image(image_url, use_column_width=True)
 
 # Authentication
 choice = st.sidebar.selectbox('login/Signup', ['Login', 'Sign up'])
@@ -35,10 +37,12 @@ def send_message(user_id, message, sender):
     message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
     db.child(user_id).child("Messages").push(message_data)
 
-# Fetch chat history from Firebase
+# Fetch chat history from Firebase and sort in descending order of timestamp
 def get_chat_history(user_id):
     messages = db.child(user_id).child("Messages").get()
-    return [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
+    chat_history = [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
+    sorted_chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S"), reverse=True)
+    return sorted_chat_history
 
 # Handle chat input and display using st.chat_message
 def handle_chat_input_with_st_chat_message(user_id):
