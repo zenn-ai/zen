@@ -25,7 +25,7 @@ image_url = "https://i.ibb.co/L13FCzp/Zen-AI-logos.jpg"
 st.sidebar.image(image_url, use_column_width=True)
 
 # Authentication
-choice = st.sidebar.selectbox('login/Signup', ['Login', 'Sign up'])
+choice = st.sidebar.selectbox('Login/Signup', ['Login', 'Sign up'])
 email = st.sidebar.text_input('Please enter your email address')
 password = st.sidebar.text_input('Please enter your password', type='password')
 
