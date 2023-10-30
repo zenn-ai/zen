@@ -2,6 +2,7 @@
 import pyrebase
 import streamlit as st
 from datetime import datetime
+from PIL import Image
 
 # Configuration Key
 firebaseConfig = {
