@@ -1,7 +1,10 @@
 # Modules
 import pyrebase
 import streamlit as st
+from collections import defaultdict
 from datetime import datetime
+import time
+import random
 
 # Configuration Key
 firebaseConfig = {
@@ -13,7 +16,6 @@ firebaseConfig = {
     'messagingSenderId': "1016159354336",
     'appId': "1:1016159354336:web:862ea0d538eee01c11ff85",
 }
-
 # Firebase Authentication
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
@@ -26,48 +28,46 @@ choice = st.sidebar.selectbox('login/Signup', ['Login', 'Sign up'])
 email = st.sidebar.text_input('Please enter your email address')
 password = st.sidebar.text_input('Please enter your password', type='password')
 
-# Simple Chatbot Function
-def chatbot_response(message):
-    responses = {
-        "hi": "Hello! How can I assist you today?",
-        "how are you?": "I'm just a computer program, but I'm doing well, thank you!",
-        "bye": "Goodbye! Have a great day!",
-    }
-    return responses.get(message.lower(), "I'm not sure how to respond to that.")
-
-#Function to display a chat message
-def display_chat_message(user, message, is_user=True):
-    if is_user:
-        st.markdown(f"<div style='text-align: right; margin-right: 10px; background-color: #e1f5fe; padding: 10px; border-radius: 10px; display: inline-block;'>{message}</div>", unsafe_allow_html=True)
-    else:
-        st.markdown(f"<div style='text-align: left; margin-left: 10px; background-color: #ffffff; padding: 10px; border-radius: 10px; display: inline-block;'>{message}</div>", unsafe_allow_html=True)
-
-# Function to send message
+# Function to send message to Firebase
 def send_message(user_id, message, sender):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
     db.child(user_id).child("Messages").push(message_data)
 
-# Function to get chat history
+# Fetch chat history from Firebase
 def get_chat_history(user_id):
     messages = db.child(user_id).child("Messages").get()
-    if messages.val() is not None:
-        return [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()]
-    return []
+    return [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
 
-# Function to handle chat input
-def handle_chat_input(user_id):
-    user_message = st.text_input("You:")
-    if st.button("Send"):
-        if user_message:
-            display_chat_message("You", user_message, is_user=True)
-            send_message(user_id, user_message, 'user')
-            bot_response = chatbot_response(user_message)
-            send_message(user_id, bot_response, 'bot')
-            display_chat_message("Bot", bot_response, is_user=False)
+# Handle chat input and display using st.chat_message
+def handle_chat_input_with_st_chat_message(user_id):
+    if "messages" not in st.session_state:
+        firebase_messages = get_chat_history(user_id)
+        st.session_state.messages = [{"role": message['sender'], "content": message['message']} for message in firebase_messages]
 
-# App
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    user_input = st.chat_input("What's on your mind?")
+    if user_input:
+        send_message(user_id, user_input, 'user')
+        st.session_state.messages.append({"role": "user", "content": user_input})
+
+        assistant_response = random.choice(
+            [
+                "Hello there! How can I assist you today?",
+                "Hi, human! Is there anything I can help you with?",
+                "Do you need help?",
+            ]
+        )
+        send_message(user_id, assistant_response, 'assistant')
+        st.session_state.messages.append({"role": "assistant", "content": assistant_response})
+
+    if st.button("Clear Chat"):
+            st.session_state.messages = []
+
 if choice == 'Sign up':
     handle = st.sidebar.text_input('Please input your app handle name', value='Default')
     submit = st.sidebar.button('Create my account')
@@ -88,10 +88,15 @@ if choice == 'Login':
 
         if tab == 'Chatbot':
             st.title('Chat with our Bot')
-            handle_chat_input(user['localId'])
-        
+            handle_chat_input_with_st_chat_message(user['localId'])
+
         elif tab == 'Chat History':
             st.title('Your Chat History')
             chat_history = get_chat_history(user['localId'])
-            for message in reversed(chat_history):
-                display_chat_message("Bot" if message['sender'] == 'bot' else "You", message['message'], is_user=(message['sender']=='user'))
+            dates = sorted(set([message['timestamp'].split(" ")[0] for message in chat_history]), reverse=True)
+            for date in dates:
+                st.subheader(date)
+                for message in chat_history:
+                    if message['timestamp'].split(" ")[0] == date:
+                        with st.chat_message(message['sender']):
+                            st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1]})")
