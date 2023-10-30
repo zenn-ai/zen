@@ -53,7 +53,7 @@ def handle_chat_input_with_st_chat_message(user_id):
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    user_input = st.chat_input("What's on your mind?")
+    user_input = st.chat_input("I am here to help you with your mental health. How are you feeling today?")
     if user_input:
         send_message(user_id, user_input, 'user')
         st.session_state.messages.append({"role": "user", "content": user_input})
@@ -76,7 +76,7 @@ if choice == 'Sign up':
     submit = st.sidebar.button('Create my account')
     if submit:
         user = auth.create_user_with_email_and_password(email, password)
-        st.success('Your account is created successfully!')
+        st.success('Your account is created successfully! \n\n Please login to continue.')
         st.balloons()
         user = auth.sign_in_with_email_and_password(email, password)
         db.child(user['localId']).child("Handle").set(handle)
@@ -103,3 +103,4 @@ if choice == 'Login':
                     if message['timestamp'].split(" ")[0] == date:
                         with st.chat_message(message['sender']):
                             st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1]})")
+                            
