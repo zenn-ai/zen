@@ -1,5 +1,13 @@
 [theme]
-primaryColor="#094375"
-backgroundColor="#094375"
-secondaryBackgroundColor="#f3d7c1"
-textColor="#ba6d6a"
+primaryColor="#f7f3e8"
+backgroundColor="#0d67b5"
+secondaryBackgroundColor="#f7f3e8"
+textColor="#000000"
+font="sans serif"
+
+# Additional colors
+accentColor="#e91e63"
+infoColor="#2196f3"
+successColor="#4caf50"
+warningColor="#ffeb3b"
+dangerColor="#f44336"
