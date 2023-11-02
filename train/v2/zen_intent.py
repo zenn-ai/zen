@@ -92,7 +92,6 @@ def prompt_from_intent(intent):
     
     elif intent == 4:
         # Intent: Self-harm
-        
         prompt = """
                     Respond exactly as following:
                     I am sorry you're feeling this way. Due to my limitations as an AI model, I am incapable of offering you support related to navigating feelings of self-harm or harm to others. 
@@ -103,7 +102,6 @@ def prompt_from_intent(intent):
         
     elif intent == 5:
         # Intent: Small talk
-        
         prompt = """
                     The client is engaging in casual small talk with you. Respond back in a light-hearted casual tone and sound interested in the topic they are discussing.
                  """
