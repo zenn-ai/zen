@@ -67,7 +67,8 @@ def prompt_from_intent(intent):
         prompt = """
                     The client is referencing a previous conversation you had with them.
                     Your response to the client should portray that you remember the past conversation you've had.
-                    Use the below context from your previous conversation to respond in an appropriate matter.
+                    Use the following context from your previous conversation to respond in an appropriate matter.
+                    ################################################################################################
                     Context:
                  """
     
@@ -83,8 +84,10 @@ def prompt_from_intent(intent):
         # Intent: Seeking therapeutic guidance
         prompt = """
                     The client is seeking your therapeutic guidance.
-                    Leverage your deep expertise of therapeutic techniques to help the client resolve their issue.
-                    Be engaging, don't lecture the client.
+                    Leverage your deep expertise of therapeutic techniques to help the client resolve their issue. Be engaging, don't lecture the client.
+                    To give a more informed and customized response, also leverage the following historical context from your previous conversations with this client:
+                    ################################################################################################
+                    Context:
                  """
     
     elif intent == 4:
