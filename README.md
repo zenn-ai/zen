@@ -1,4 +1,4 @@
-# <img width="100%" alt="image" align = "center" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/be59803e-bd1e-4fc6-945b-72ed6e7c7a75">
+<img width="100%" alt="image" align = "center" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/be59803e-bd1e-4fc6-945b-72ed6e7c7a75">
 
 ### Table of Contents
 * [Motivation](#motivation)
