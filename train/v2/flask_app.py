@@ -147,6 +147,7 @@ app = Flask(__name__)
 
 def get_answer():
     question = request.json.get("question", "")
+    username = request.json.get("username", "")
     print("******************************************", question, "******************************************")
     conv, output_stream, conv_path = chat_streamlit(
         model=model,
