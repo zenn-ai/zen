@@ -12,17 +12,17 @@
 
 ### Motivation <a name="motivation"></a>
 
-<img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/63db4eb4-6ea3-46a4-815e-bd186ded8046">
+<img width="1121" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/624e42b9-d17a-43b1-a03c-3a0b1677a5ba">
 
-<img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/36544407-e439-4ebc-941b-91194f19359b">
+<img width="1118" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/110d42eb-a8df-4150-b8c3-af8be7e4766f">
 
 ### Overview of ZenAI <a name="introduction"></a>
 
-<img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/4cd1274e-c6dd-4567-b82b-3f060c84a8b5">
+<img width="938" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/f0b3bec3-3de8-4e73-a5ea-af7922a8705b">
 
 ### Data <a name="data"></a>
 
-<img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/8105b260-4451-4099-8d8f-b0779c32f587">
+<img width="1108" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/39e739cc-6ab7-41bf-9997-849c68a12cf0">
 
 Data and code for preparing the data code be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/data).
 
@@ -32,7 +32,7 @@ Data and code for preparing the data code be found [here](https://github.com/zen
 
 ### Model inference <a name="inference"></a>
 
-<img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/48564017-25c0-4e7d-8b80-52b3ccd47334">
+<img width="1122" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/f6d1c2a3-d92e-4f2f-9879-e9b89f5345e2">
 
 Model inference code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/inference).
 
@@ -44,8 +44,10 @@ In order to test our PaLM 2 based intent-detection model, we tested it against 3
 <img width="50%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1b43f3cc-dcca-4df5-88d2-3179a39a191d">
 
 ### User experience <a name="ux"></a>
-* Additional details to come.
-* Insert link to UX
+
+<img width="960" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/19a119e2-afe5-404d-a6dc-40d786a7befb">
+
+* Embed UX video
 
 ### Key risks & future work <a name="risks"></a>
 <img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1294b4cf-f7fa-4586-b099-802c823f2d8a">
