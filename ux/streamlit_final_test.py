@@ -24,7 +24,7 @@ db = firebase.database()
 image_url = "https://i.ibb.co/L13FCzp/Zen-AI-logos.jpg"
 st.sidebar.image(image_url, use_column_width=True)
 
-# Authentication
+# Authentication UI
 choice = st.sidebar.selectbox('Login/Signup', ['Login', 'Sign up'])
 email = st.sidebar.text_input('Please enter your email address')
 password = st.sidebar.text_input('Please enter your password', type='password')
@@ -53,7 +53,7 @@ def handle_chat_input_with_st_chat_message(user_id):
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    user_input = st.chat_input("I am here to help you with your mental health. How are you feeling today?")
+    user_input = st.chat_input("How are you feeling today? Let's chat")
     if user_input:
         send_message(user_id, user_input, 'user')
         st.session_state.messages.append({"role": "user", "content": user_input})
@@ -68,9 +68,11 @@ def handle_chat_input_with_st_chat_message(user_id):
         send_message(user_id, assistant_response, 'assistant')
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
 
-    if st.button("Clear Chat"):
-            st.session_state.messages = []
+    for message in st.session_state.messages[-10:]: 
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
+# ChatBot Logic
 if choice == 'Sign up':
     handle = st.sidebar.text_input('Please input your app handle name', value='Default')
     submit = st.sidebar.button('Create my account')
@@ -86,6 +88,11 @@ if choice == 'Login':
     login = st.sidebar.checkbox('Login')
     if login:
         user = auth.sign_in_with_email_and_password(email, password)
+
+        if 'user_id' not in st.session_state or st.session_state.user_id != user['localId']:
+            st.session_state.messages = []
+            st.session_state.user_id = user['localId']
+            
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
         tab = st.radio('Go to', ['Chat', 'Conversation History'])
 
@@ -96,11 +103,18 @@ if choice == 'Login':
         elif tab == 'Conversation History':
             st.title('Your Conversation History')
             chat_history = get_chat_history(user['localId'])
-            dates = sorted(set([message['timestamp'].split(" ")[0] for message in chat_history]), reverse=True)
-            for date in dates:
-                st.subheader(date)
+
+            date_format = "%d/%m/%Y"
+            unique_dates = set(datetime.strptime(message['timestamp'].split(" ")[0], date_format) for message in chat_history)
+            sorted_dates = sorted(unique_dates, reverse=True)
+
+            for date in sorted_dates:
+                display_date = date.strftime(date_format)
+                st.subheader(display_date)
+
                 for message in chat_history:
-                    if message['timestamp'].split(" ")[0] == date:
+                    message_date = message['timestamp'].split(" ")[0]
+                    if datetime.strptime(message_date, date_format) == date:
                         with st.chat_message(message['sender']):
                             st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1]})")
                             
