@@ -34,7 +34,6 @@ Data and code for preparing the data code be found [here](https://github.com/zen
 
 <img width="1122" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/f6d1c2a3-d92e-4f2f-9879-e9b89f5345e2">
 
-
 Model inference code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/inference).
 
 ## Model testing <a name="testing"></a>
