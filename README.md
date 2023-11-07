@@ -40,7 +40,7 @@ Model inference code can be found [here](https://github.com/zenn-ai/therapy-bot/
 ## Model testing <a name="testing"></a>
 * Additional details to come.
 
-In order to test our PaLM 2 based intent-detection model, we tested it against 30 prompts (with the assistance of ChatGPT). The results are shown below and highlight that our model performs quite well. Supporting code can be found [here](https://github.com/zenn-ai/therapy-bot/blob/main/inference/bison_intent.ipynb).
+We tested our intent-detection classifier against 30 labeled prompts. The results are shown below and highlight that our model performs quite well. Supporting code can be found [here](https://github.com/zenn-ai/therapy-bot/blob/main/inference/bison_intent.ipynb).
 
 <img width="50%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1b43f3cc-dcca-4df5-88d2-3179a39a191d">
 
