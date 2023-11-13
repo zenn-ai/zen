@@ -14,3 +14,4 @@ sentencepiece
 fschat==0.2.31
 flask==3.0.0
 firebase-rest-api==1.11.0
+langchain==0.0.334

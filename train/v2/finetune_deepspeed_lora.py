@@ -211,14 +211,18 @@ conversations += get_therapy_conv()
 train, test = train_test_split(conversations, test_size=1000, random_state=42)
 print(len(conversations), len(train), len(test))
 
+import pickle
+
+with open("test.p", "wb") as f:
+    pickle.dump(test, f)
+
 train_dataset = SupervisedDataset(train, tokenizer)
 eval_dataset = SupervisedDataset(test, tokenizer)
 data_module = dict(train_dataset=train_dataset, eval_dataset=eval_dataset)
 
 train_args = TrainingArguments(
-    output_dir="/home/jupyter/therapy-bot/models/zenai_sample2",
-    resume_from_checkpoint=False,
-    max_steps=50,
+    output_dir="/home/jupyter/therapy-bot/models/ZenAI",
+    max_steps=20000,
     optim="adamw_torch",
     per_device_train_batch_size=1,
     remove_unused_columns=False,
@@ -227,21 +231,22 @@ train_args = TrainingArguments(
     gradient_accumulation_steps=1,
     fp16=True,
     lr_scheduler_type="constant_with_warmup",
-    warmup_steps=2,
-    save_steps=10,
+    warmup_steps=200,
+    save_steps=500,
     save_strategy="steps",
     evaluation_strategy="steps",
-    eval_steps=10,
-    save_total_limit=1,
-    logging_steps=10,
+    eval_steps=500,
+    save_total_limit=2,
+    logging_steps=500,
     report_to="tensorboard",
-    # hub_model_id="kmnis/ZenAI-v3",
+    hub_model_id="kmnis/ZenAI-v4",
     # hub_strategy="checkpoint",
-    # hub_private_repo=True,
-    load_best_model_at_end=True,
-    # push_to_hub=True,
+    hub_private_repo=True,
+    # load_best_model_at_end=True,
+    push_to_hub=True,
     deepspeed="ds_config_zero3.json",
-    # hub_token="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"
+    label_names=["labels"],
+    hub_token="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"
 )
 
 lora_r = 8
