@@ -82,7 +82,7 @@ def prompt_from_intent(intent):
     
     elif intent == 4:
         # Intent: Self-harm
-        prompt = """I am sorry you're feeling this way. Due to my limitations as an AI model, I am incapable of offering you support related to navigating feelings of self-harm or harm to others. If you are feeling severe distress and/or thoughts of self-harm, please dial 988 to connect to the Suicide and Crisis Lifeline. If you are not in an emergency situation, please seek out the support of a professional human therapist or counselor. You can visit websites such as https://www.psychologytoday.com/ to find a therapist near you. This is a test."""
+        prompt = """I am sorry you're feeling this way. Due to my limitations as an AI model, I am incapable of offering you support related to navigating feelings of self-harm or harm to others. If you are feeling severe distress and/or thoughts of self-harm, please dial 988 to connect to the Suicide and Crisis Lifeline. If you are not in an emergency situation, please seek out the support of a professional human therapist or counselor. You can visit websites such as https://www.psychologytoday.com/ to find a therapist near you."""
         
     elif intent == 5:
         # Intent: Small talk
