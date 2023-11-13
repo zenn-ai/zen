@@ -2,6 +2,7 @@ import pyrebase
 import streamlit as st
 from datetime import datetime
 import random
+import requests
 
 
 # Configuration Key
@@ -43,19 +44,11 @@ def clear_conversation_history(user_id):
     db.child(user_id).child("Messages").remove()
 
 
-# Function to send message to Firebase
-def send_message(user_id, message, sender):
-    now = datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
-    db.child(user_id).child("Messages").push(message_data)
-
-
 # Fetch Conversation History from Firebase and sort in descending order of timestamp
 def get_chat_history(user_id):
     messages = db.child(user_id).child("Messages").get()
     chat_history = [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
-    sorted_chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S"), reverse=True)
+    sorted_chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S.%f"), reverse=True)
     return sorted_chat_history
 
 
@@ -65,25 +58,26 @@ def handle_chat_input_with_st_chat_message(user_id):
         firebase_messages = get_chat_history(user_id)
         st.session_state.messages = [{"role": message['sender'], "content": message['message']} for message in firebase_messages]
 
-    user_input = st.chat_input("How are you feeling today? Let's chat")
-    if user_input:
-        send_message(user_id, user_input, 'user')
-        st.session_state.messages.append({"role": "user", "content": user_input})
-
-        assistant_response = random.choice(
-            [
-                "Hello there! How can I assist you today?",
-                "Hi, human! Is there anything I can help you with?",
-                "Do you need help?",
-            ]
-        )
-        send_message(user_id, assistant_response, 'assistant')
-        st.session_state.messages.append({"role": "assistant", "content": assistant_response})
-
     # Display the last 10 messages
     for message in st.session_state.messages[-10:]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+    
+    user_input = st.chat_input("How are you feeling today? Let's chat")
+    if user_input:
+        with st.chat_message("user"):
+            st.markdown(user_input)
+        api_url = "https://f0b3-34-173-16-97.ngrok-free.app/api/data"
+        
+        with st.spinner(""):
+            assistant_response = requests.post(api_url, json={"question": user_input, "user_id": user_id})
+            if assistant_response.status_code == 200:
+                assistant_response = assistant_response.json()["answer"]
+                with st.chat_message("assistant"):
+                    st.markdown(assistant_response)
+
+                st.session_state.messages.append({"role": "user", "content": user_input})
+                st.session_state.messages.append({"role": "assistant", "content": assistant_response})
 
 
 # text input styling
