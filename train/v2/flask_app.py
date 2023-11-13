@@ -27,7 +27,7 @@ from langchain.embeddings import HuggingFaceBgeEmbeddings
 
 warnings.filterwarnings('ignore')
 
-SYSTEM_MSG = """Your name is ZenAI and you're a therapist. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is ZenAI and you're an AI mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
 # Configuration Key
 firebaseConfig = {
@@ -137,7 +137,7 @@ def load_model(model_path, num_gpus, max_gpu_memory=None):
 use_vicuna = False
 num_gpus = 4
 max_gpu_memory = "12GiB"
-model_path = "/home/jupyter/therapy-bot/models/ZenAI/"
+model_path = "kmnis/ZenAI-v2" # "/home/jupyter/therapy-bot/models/ZenAI/"
 if use_vicuna:
     _, tokenizer, model = load_model(model_path, num_gpus, max_gpu_memory)
 else:

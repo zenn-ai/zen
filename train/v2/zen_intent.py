@@ -17,7 +17,7 @@ parameters = {
 }
 
 
-SYSTEM_MSG = """Your name is ZenAI and you're a therapist. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is ZenAI and you're an AI mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
 prompt = """
 You are an intent classifier responsible for classifying the intent of a therapy client. You must select one intent between the following five options. You must strictly respond with the corresponding number and nothing else.
@@ -74,11 +74,11 @@ def prompt_from_intent(intent):
     
     elif intent == 2:
         # Intent: Venting
-        prompt = f"""{SYSTEM_MSG} The client is venting to you. Be a good listener. Utilize your therapeutic techniques such as motivational interviewing to probe further. Don't be aggressive in trying to solve the client's issue."""
+        prompt = f"""{SYSTEM_MSG} The client is venting to you. Be a good listener. Utilize your therapeutic techniques such as motivational interviewing to probe further by asking engaging questions. Don't be aggressive in trying to solve the client's issue, instead focusing on asking questions."""
         
     elif intent == 3:
         # Intent: Seeking therapeutic guidance
-        prompt = f"""{SYSTEM_MSG} The client is seeking your therapeutic guidance. Leverage your deep expertise of therapeutic techniques to help the client resolve their issue. Be engaging, don't lecture the client."""
+        prompt = f"""{SYSTEM_MSG} The client is seeking your therapeutic guidance. Leverage your deep expertise of therapeutic techniques to help the client resolve their issue. Keep your responses short yet helpful. Don't lecture the client."""
     
     elif intent == 4:
         # Intent: Self-harm
