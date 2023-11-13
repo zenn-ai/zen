@@ -24,6 +24,7 @@ db = firebase.database()
 
 
 # Main UI
+st.set_page_config(page_title="ZenAI")
 
 # Adjust the positioning of the 
 st.markdown("""
