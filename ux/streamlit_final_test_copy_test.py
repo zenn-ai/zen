@@ -37,6 +37,12 @@ div.row-widget.stRadio > div {
 tab = st.radio("", ['Login', 'Sign up', 'Chat', 'Conversation History'])
 
 
+# function to flush the DB
+def clear_conversation_history(user_id):
+    # Delete the user's messages from Firebase
+    db.child(user_id).child("Messages").remove()
+
+
 # Function to send message to Firebase
 def send_message(user_id, message, sender):
     now = datetime.now()
@@ -133,13 +139,11 @@ elif tab == 'Login':
             st.error('Login failed: Wrong Credentials!' )
 
 
-
 # Image in the sidebar (optional)
 image_url = "https://i.ibb.co/1qYfmzm/ZenAI.jpg"
 st.sidebar.image(image_url, use_column_width=True)
 # Sidebar User Info Display
 if 'user_id' in st.session_state and 'user_handle' in st.session_state:
-    st.sidebar.markdown(f"<h1 style='color:white;'>********* User Info *********</h1>", unsafe_allow_html=True)
     st.sidebar.markdown(f"<h2 style='color:white;'>Welcome back, {st.session_state.user_handle}!</h2>", unsafe_allow_html=True)
 
 
@@ -159,13 +163,21 @@ elif tab == 'Conversation History' and 'user_id' in st.session_state:
 
     for date in sorted_dates:
         display_date = date.strftime(date_format)
-        st.subheader(display_date)
+        
+        with st.expander(display_date, expanded=False):
+            for message in chat_history:
+                message_date = message['timestamp'].split(" ")[0]
+                if datetime.strptime(message_date, date_format) == date:
+                    with st.chat_message(message['sender']):
+                        st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1]})")
 
-        for message in chat_history:
-            message_date = message['timestamp'].split(" ")[0]
-            if datetime.strptime(message_date, date_format) == date:
-                with st.chat_message(message['sender']):
-                    st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1]})")
+         # Clear Conversation History Button
+    if st.button('Clear Conversation History'):
+        clear_conversation_history(st.session_state.user_id)
+        st.success('Conversation history cleared.')
+        st.session_state.messages = []  # Clear local chat history
+        st.experimental_rerun()
+        
 
 
 # Make sure to clear the chat input field after sending a message
