@@ -1,4 +1,4 @@
-import pyrebase
+import pyrebase # To install: pip install Pyerbase4
 import streamlit as st
 from datetime import datetime
 import random
@@ -16,15 +16,14 @@ firebaseConfig = {
 }
 
 
-# Firebase Authentication
-firebase = pyrebase.initialize_app(firebaseConfig)
-auth = firebase.auth()
-db = firebase.database()
+### Firebase Authentication & Database
+firebase = pyrebase.initialize_app(firebaseConfig) # intialize connection using the configuration key
+auth = firebase.auth() # accessing the firebase authentication module 
+db = firebase.database() # accessing the firebase database module
 
 
-# Main UI
-
-# Adjust the positioning of the 
+### Main UI
+# Adjust the positioning of the Radio Buttons 
 st.markdown("""
 <style>
 div.row-widget.stRadio > div {
@@ -34,25 +33,25 @@ div.row-widget.stRadio > div {
 </style>
 """, unsafe_allow_html=True)
 
-tab = st.radio("", ['Login', 'Sign up', 'Chat', 'Conversation History'])
+tab = st.radio("", ['Login', 'Sign up', 'Chat', 'Conversation History']) # creating radio buttons for navigation
 
 
-# function to flush the DB
 def clear_conversation_history(user_id):
-    # Delete the user's messages from Firebase
+    '''' Function to flush the DB for a specific user '''
+    # Delete the user's messages from Firebase DB (user-specific)
     db.child(user_id).child("Messages").remove()
 
 
-# Function to send message to Firebase
 def send_message(user_id, message, sender):
+    ''' Function to send message to Firebase with its designated timestamp '''
     now = datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S") # format the datetime string
     message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
     db.child(user_id).child("Messages").push(message_data)
 
 
-# Fetch Conversation History from Firebase and sort in descending order of timestamp
 def get_chat_history(user_id):
+    ''' Fetch Conversation History from Firebase and sort in descending order of timestamp '''
     messages = db.child(user_id).child("Messages").get()
     chat_history = [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
     sorted_chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S"), reverse=True)
@@ -81,12 +80,12 @@ def handle_chat_input_with_st_chat_message(user_id):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
 
     # Display the last 10 messages
-    for message in st.session_state.messages[-10:]:
+    for message in st.session_state.messages: # for testing: for message in st.session_state.messages[-10:]
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
 
-# text input styling
+# Text input styling
 def text_input_with_styling(label, value='', key=None, placeholder_color='white', text_color='white'):
     # Custom CSS to include white color for text input and placeholder
     st.markdown(f"""
@@ -139,7 +138,7 @@ elif tab == 'Login':
             st.error('Login failed: Wrong Credentials!' )
 
 
-# Image in the sidebar (optional)
+# Image in the sidebar 
 image_url = "https://i.ibb.co/1qYfmzm/ZenAI.jpg"
 st.sidebar.image(image_url, use_column_width=True)
 # Sidebar User Info Display
