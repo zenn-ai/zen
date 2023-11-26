@@ -44,7 +44,7 @@ except AssertionError:
 
 
 def get_df():
-    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u2.csv"]
+    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u_v2.csv"]
     df = pd.DataFrame()
 
     for p in csv_files:
@@ -242,7 +242,7 @@ train_args = TrainingArguments(
     hub_model_id="kmnis/Zen",
     # hub_strategy="checkpoint",
     hub_private_repo=True,
-    # load_best_model_at_end=True,
+    load_best_model_at_end=True,
     push_to_hub=True,
     deepspeed="ds_config_zero3.json",
     label_names=["labels"],
