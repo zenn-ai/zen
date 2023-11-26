@@ -26,12 +26,12 @@ from fastchat.conversation import get_conv_template, register_conv_template, Con
 
 
 IGNORE_TOKEN_ID = LabelSmoother.ignore_index
-SYSTEM_MSG = """Your name is ZenAI and you're a therapist. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
 try:
     register_conv_template(
         Conversation(
-            name="ZenAI",
+            name="Zen",
             system_message=SYSTEM_MSG,
             roles=("USER", "ASSISTANT"),
             sep_style=SeparatorStyle.ADD_COLON_TWO,
@@ -44,7 +44,7 @@ except AssertionError:
 
 
 def get_df():
-    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u.csv"]
+    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u2.csv"]
     df = pd.DataFrame()
 
     for p in csv_files:
@@ -64,7 +64,7 @@ def get_df():
 
 
 def get_conversations(df, reset):
-    conv = get_conv_template("ZenAI")
+    conv = get_conv_template("Zen")
     conversations = []
     
     conv.messages = []
@@ -221,8 +221,8 @@ eval_dataset = SupervisedDataset(test, tokenizer)
 data_module = dict(train_dataset=train_dataset, eval_dataset=eval_dataset)
 
 train_args = TrainingArguments(
-    output_dir="/home/jupyter/therapy-bot/models/ZenAI",
-    max_steps=20000,
+    output_dir="/home/jupyter/therapy-bot/models/Zen",
+    max_steps=10000,
     optim="adamw_torch",
     per_device_train_batch_size=1,
     remove_unused_columns=False,
@@ -239,7 +239,7 @@ train_args = TrainingArguments(
     save_total_limit=2,
     logging_steps=500,
     report_to="tensorboard",
-    hub_model_id="kmnis/ZenAI-v4",
+    hub_model_id="kmnis/Zen",
     # hub_strategy="checkpoint",
     hub_private_repo=True,
     # load_best_model_at_end=True,
