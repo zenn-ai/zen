@@ -1,6 +1,10 @@
+import os
 import pandas as pd
+import random
 from typing import Dict
 from sklearn.model_selection import train_test_split
+
+from dotenv import load_dotenv
 
 from dataclasses import dataclass, field
 from typing import cast, Optional
@@ -24,14 +28,18 @@ from peft import LoraConfig, get_peft_model
 
 from fastchat.conversation import get_conv_template, register_conv_template, Conversation, SeparatorStyle
 
+load_dotenv("../.env")
+hf_token = os.getenv('HF_TOKEN')
 
 IGNORE_TOKEN_ID = LabelSmoother.ignore_index
-SYSTEM_MSG = """Your name is ZenAI and you're a therapist. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+
+DATA_DIR = "../data"
 
 try:
     register_conv_template(
         Conversation(
-            name="ZenAI",
+            name="Zen",
             system_message=SYSTEM_MSG,
             roles=("USER", "ASSISTANT"),
             sep_style=SeparatorStyle.ADD_COLON_TWO,
@@ -44,11 +52,11 @@ except AssertionError:
 
 
 def get_df():
-    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u.csv"]
+    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv"]
     df = pd.DataFrame()
 
     for p in csv_files:
-        df1 = pd.read_csv(f"../../data/processed/{p}")[["human", "zen"]]
+        df1 = pd.read_csv(os.path.join(DATA_DIR, p))[["human", "zen"]]
         df1 = df1.rename(columns={"human": "USER", "zen": "ASSISTANT"})
         df1 = df1.drop_duplicates(subset=["USER", "ASSISTANT"], keep="first", ignore_index=True)
 
@@ -63,23 +71,49 @@ def get_df():
     return df
 
 
-def get_conversations(df, reset):
-    conv = get_conv_template("ZenAI")
+greetings = [
+    ("Hello!", "Hello! How can I help you today?"),
+    ("What's up?", "Hello! How can I help you today?"),
+    ("What is up?", "Hello! How can I help you today?"),
+    ("Hi, how are you?", "Hello! How can I help you today?")
+]
+goodbyes = [
+    ('Have a nice day!', 'You too! If you have any concerns or questions about mental health, please feel free to ask anytime.'),
+    ('Goodbye', "Goodbye! If you have any concerns or questions about mental health, please feel free to ask anytime."),
+    ('Talk to you later!', "Until next time! I'll be here if you need me."),
+    ('Alright, thanks for your help.', "You're welcome! Have a great day ahead and feel free to reach out anytime if you have any concerns or need someone to talk to.")
+]
+
+
+def get_conversations(df, reset, identity=False):
+    conv = get_conv_template("Zen")
     conversations = []
     
     conv.messages = []
     for index, row in df.iterrows():
         if reset:
             conv.messages = []
+        
+        if identity and random.choices([0, 1], weights=[0.25, 0.75], k=1)[0]:
+            greet = random.sample(greetings, 1)[0]
+            conv.append_message("USER", greet[0])
+            conv.append_message("ASSISTANT", greet[1])
+            
         conv.append_message("USER", row["USER"])
         conv.append_message("ASSISTANT", row["ASSISTANT"])
+        
+        if identity and random.choices([0, 1], weights=[0.25, 0.75], k=1)[0]:
+            bye = random.sample(goodbyes, 1)[0]
+            conv.append_message("USER", bye[0])
+            conv.append_message("ASSISTANT", bye[1])
+            
         conversations.append(conv.get_prompt())
     
     return conversations
 
 
 def get_therapy_conv():
-    df = pd.read_csv("../../data/processed/PALM_Alexander_Street.csv")
+    df = pd.read_csv(os.path.join(DATA_DIR, "PALM_Alexander_Street.csv"))
     df = df.dropna(ignore_index=True)
     df = df.drop(index=0)
     df.reset_index(drop=True, inplace=True)
@@ -91,6 +125,19 @@ def get_therapy_conv():
         conversations += get_conversations(conv_df, reset=False)
     
     return conversations
+
+
+def get_identity_conv():
+    
+    df = pd.read_csv(os.path.join(DATA_DIR, "who_r_u.csv"))
+    df = df.rename(columns={"human": "USER", "zen": "ASSISTANT"})
+
+    df["USER"] = df.USER.str.replace('\s+', ' ', regex=True)
+    df["USER"] = df.USER.str.replace(r'\.([a-zA-Z0-9])', r'. \1', regex=True)
+    df["ASSISTANT"] = df.ASSISTANT.str.replace('\s+', ' ', regex=True)
+    df["ASSISTANT"] = df.ASSISTANT.str.replace(r'\.([a-zA-Z0-9])', r'. \1', regex=True)
+    
+    return get_conversations(df, reset=True, identity=True)
 
 
 def rank0_print(*args):
@@ -207,13 +254,14 @@ class SupervisedDataset(Dataset):
 df = get_df()
 conversations = get_conversations(df, reset=True)
 conversations += get_therapy_conv()
+conversations += get_identity_conv()
 
 train, test = train_test_split(conversations, test_size=1000, random_state=42)
 print(len(conversations), len(train), len(test))
 
 import pickle
 
-with open("test.p", "wb") as f:
+with open(os.path.join(DATA_DIR, "test.p"), "wb") as f:
     pickle.dump(test, f)
 
 train_dataset = SupervisedDataset(train, tokenizer)
@@ -221,8 +269,8 @@ eval_dataset = SupervisedDataset(test, tokenizer)
 data_module = dict(train_dataset=train_dataset, eval_dataset=eval_dataset)
 
 train_args = TrainingArguments(
-    output_dir="/home/jupyter/therapy-bot/models/ZenAI",
-    max_steps=20000,
+    output_dir="/home/jupyter/therapy-bot/models/Zen",
+    max_steps=10000,
     optim="adamw_torch",
     per_device_train_batch_size=1,
     remove_unused_columns=False,
@@ -239,20 +287,20 @@ train_args = TrainingArguments(
     save_total_limit=2,
     logging_steps=500,
     report_to="tensorboard",
-    hub_model_id="kmnis/ZenAI-v4",
+    hub_model_id="kmnis/Zen",
     # hub_strategy="checkpoint",
     hub_private_repo=True,
-    # load_best_model_at_end=True,
+    load_best_model_at_end=True,
     push_to_hub=True,
     deepspeed="ds_config_zero3.json",
     label_names=["labels"],
-    hub_token="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"
+    hub_token=hf_token
 )
 
 lora_r = 8
 lora_alpha = 16
-lora_dropout = 0.1
-target_modules=["q_proj", "k_proj", "v_proj", "out_proj", "fc_in", "fc_out", "wte"]
+lora_dropout = 0.05
+target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "embed_tokens", "lm_head", "gate_proj", "up_proj", "down_proj"]
 
 # preparing lora configuration
 peft_config = LoraConfig(
