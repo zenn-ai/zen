@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from typing import Dict
 from sklearn.model_selection import train_test_split
@@ -28,6 +29,8 @@ from fastchat.conversation import get_conv_template, register_conv_template, Con
 IGNORE_TOKEN_ID = LabelSmoother.ignore_index
 SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
+DATA_DIR = "../data"
+
 try:
     register_conv_template(
         Conversation(
@@ -44,11 +47,11 @@ except AssertionError:
 
 
 def get_df():
-    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u_v2.csv"]
+    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u.csv"]
     df = pd.DataFrame()
 
     for p in csv_files:
-        df1 = pd.read_csv(f"../../data/processed/{p}")[["human", "zen"]]
+        df1 = pd.read_csv(os.path.join(DATA_DIR, p))[["human", "zen"]]
         df1 = df1.rename(columns={"human": "USER", "zen": "ASSISTANT"})
         df1 = df1.drop_duplicates(subset=["USER", "ASSISTANT"], keep="first", ignore_index=True)
 
@@ -79,7 +82,7 @@ def get_conversations(df, reset):
 
 
 def get_therapy_conv():
-    df = pd.read_csv("../../data/processed/PALM_Alexander_Street.csv")
+    df = pd.read_csv(os.path.join(DATA_DIR, "PALM_Alexander_Street.csv"))
     df = df.dropna(ignore_index=True)
     df = df.drop(index=0)
     df.reset_index(drop=True, inplace=True)
@@ -213,7 +216,7 @@ print(len(conversations), len(train), len(test))
 
 import pickle
 
-with open("test.p", "wb") as f:
+with open(os.path.join(DATA_DIR, "test.p"), "wb") as f:
     pickle.dump(test, f)
 
 train_dataset = SupervisedDataset(train, tokenizer)
