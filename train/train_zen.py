@@ -108,9 +108,6 @@ def get_conversations(df, reset, identity=False):
             conv.append_message("ASSISTANT", bye[1])
             
         conversations.append(conv.get_prompt())
-        if identity:
-            print(conv.get_prompt())
-            print("--------------------------------------------------------------")
     
     return conversations
 
