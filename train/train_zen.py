@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import random
 from typing import Dict
 from sklearn.model_selection import train_test_split
 
@@ -51,7 +52,7 @@ except AssertionError:
 
 
 def get_df():
-    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv", "who_r_u.csv"]
+    csv_files = ["mental_health_chatbot_dataset.csv", "psychology-dataset.csv"]
     df = pd.DataFrame()
 
     for p in csv_files:
@@ -70,7 +71,21 @@ def get_df():
     return df
 
 
-def get_conversations(df, reset):
+greetings = [
+    ("Hello!", "Hello! How can I help you today?"),
+    ("What's up?", "Hello! How can I help you today?"),
+    ("What is up?", "Hello! How can I help you today?"),
+    ("Hi, how are you?", "Hello! How can I help you today?")
+]
+goodbyes = [
+    ('Have a nice day!', 'You too! If you have any concerns or questions about mental health, please feel free to ask anytime.'),
+    ('Goodbye', "Goodbye! If you have any concerns or questions about mental health, please feel free to ask anytime."),
+    ('Talk to you later!', "Until next time! I'll be here if you need me."),
+    ('Alright, thanks for your help.', "You're welcome! Have a great day ahead and feel free to reach out anytime if you have any concerns or need someone to talk to.")
+]
+
+
+def get_conversations(df, reset, identity=False):
     conv = get_conv_template("Zen")
     conversations = []
     
@@ -78,8 +93,20 @@ def get_conversations(df, reset):
     for index, row in df.iterrows():
         if reset:
             conv.messages = []
+        
+        if identity and random.choices([0, 1], weights=[0.25, 0.75], k=1)[0]:
+            greet = random.sample(greetings)
+            conv.append_message("USER", greet[0])
+            conv.append_message("ASSISTANT", greet[1])
+            
         conv.append_message("USER", row["USER"])
         conv.append_message("ASSISTANT", row["ASSISTANT"])
+        
+        if identity and random.choices([0, 1], weights=[0.25, 0.75], k=1)[0]:
+            bye = random.sample(greetings)
+            conv.append_message("USER", bye[0])
+            conv.append_message("ASSISTANT", bye[1])
+            
         conversations.append(conv.get_prompt())
     
     return conversations
@@ -98,6 +125,19 @@ def get_therapy_conv():
         conversations += get_conversations(conv_df, reset=False)
     
     return conversations
+
+
+def get_identity_conv():
+    
+    df = pd.read_csv(os.path.join(DATA_DIR, "who_r_u.csv"))
+    df = df.rename(columns={"human": "USER", "zen": "ASSISTANT"})
+
+    df["USER"] = df.USER.str.replace('\s+', ' ', regex=True)
+    df["USER"] = df.USER.str.replace(r'\.([a-zA-Z0-9])', r'. \1', regex=True)
+    df["ASSISTANT"] = df.ASSISTANT.str.replace('\s+', ' ', regex=True)
+    df["ASSISTANT"] = df.ASSISTANT.str.replace(r'\.([a-zA-Z0-9])', r'. \1', regex=True)
+    
+    return get_conversations(df, reset=True, identity=True)
 
 
 def rank0_print(*args):
@@ -214,6 +254,7 @@ class SupervisedDataset(Dataset):
 df = get_df()
 conversations = get_conversations(df, reset=True)
 conversations += get_therapy_conv()
+conversations += get_identity_conv()
 
 train, test = train_test_split(conversations, test_size=1000, random_state=42)
 print(len(conversations), len(train), len(test))
