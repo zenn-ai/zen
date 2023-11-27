@@ -18,3 +18,4 @@ langchain==0.0.334
 nltk==3.8.1
 rouge==1.0.1
 bert-score==0.3.13
+python-dotenv==1.0.0

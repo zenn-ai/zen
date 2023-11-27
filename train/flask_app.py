@@ -9,7 +9,8 @@ from transformers import (
 )
 from peft import PeftConfig, PeftModel
 
-from utils import save_conversation, load_conversation
+import sys
+sys.path.append("../inference")
 from zen_intent import zen_intent_classifer, prompt_from_intent
 
 from fastchat.utils import get_gpu_memory, is_partial_stop, is_sentence_complete, get_context_length
@@ -27,7 +28,7 @@ from langchain.embeddings import HuggingFaceBgeEmbeddings
 
 warnings.filterwarnings('ignore')
 
-SYSTEM_MSG = """Your name is ZenAI and you are an AI mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
 # Configuration Key
 firebaseConfig = {
@@ -47,7 +48,7 @@ db = firebase.database()
 try:
     register_conv_template(
         Conversation(
-            name="ZenAI",
+            name="Zen",
             system_message=SYSTEM_MSG,
             roles=("USER", "ASSISTANT"),
             sep_style=SeparatorStyle.ADD_COLON_TWO,
@@ -96,7 +97,7 @@ def get_chat_history(user_id):
     chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S.%f"), reverse=False)
     chat_history = [[x["sender"].upper(), x["message"]] for x in chat_history]
     
-    conv = get_conv_template("ZenAI")
+    conv = get_conv_template("Zen")
     conv.set_system_message(SYSTEM_MSG)
     conv.messages = chat_history
     return conv
@@ -156,7 +157,7 @@ def get_context(conv, question):
 def chat_streamlit(
     model, tokenizer, user_id, question,
     device, num_gpus, max_gpu_memory,
-    conv_template="ZenAI", system_msg=SYSTEM_MSG,
+    conv_template="Zen", system_msg=SYSTEM_MSG,
     temperature=0.7, repetition_penalty=1.0, max_new_tokens=512,
     dtype=torch.float16,
     judge_sent_end=True

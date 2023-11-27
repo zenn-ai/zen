@@ -3,6 +3,8 @@ import pandas as pd
 from typing import Dict
 from sklearn.model_selection import train_test_split
 
+from dotenv import load_dotenv
+
 from dataclasses import dataclass, field
 from typing import cast, Optional
 
@@ -25,6 +27,8 @@ from peft import LoraConfig, get_peft_model
 
 from fastchat.conversation import get_conv_template, register_conv_template, Conversation, SeparatorStyle
 
+load_dotenv("../.env")
+hf_token = os.getenv('HF_TOKEN')
 
 IGNORE_TOKEN_ID = LabelSmoother.ignore_index
 SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
@@ -249,13 +253,13 @@ train_args = TrainingArguments(
     push_to_hub=True,
     deepspeed="ds_config_zero3.json",
     label_names=["labels"],
-    hub_token="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"
+    hub_token=hf_token
 )
 
 lora_r = 8
 lora_alpha = 16
-lora_dropout = 0.1
-target_modules=["q_proj", "k_proj", "v_proj", "out_proj", "fc_in", "fc_out", "wte"]
+lora_dropout = 0.05
+target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "embed_tokens", "lm_head", "gate_proj", "up_proj", "down_proj"]
 
 # preparing lora configuration
 peft_config = LoraConfig(
