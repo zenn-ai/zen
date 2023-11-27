@@ -95,7 +95,7 @@ def get_conversations(df, reset, identity=False):
             conv.messages = []
         
         if identity and random.choices([0, 1], weights=[0.25, 0.75], k=1)[0]:
-            greet = random.sample(greetings)
+            greet = random.sample(greetings, 1)[0]
             conv.append_message("USER", greet[0])
             conv.append_message("ASSISTANT", greet[1])
             
@@ -103,7 +103,7 @@ def get_conversations(df, reset, identity=False):
         conv.append_message("ASSISTANT", row["ASSISTANT"])
         
         if identity and random.choices([0, 1], weights=[0.25, 0.75], k=1)[0]:
-            bye = random.sample(greetings)
+            bye = random.sample(greetings, 1)[0]
             conv.append_message("USER", bye[0])
             conv.append_message("ASSISTANT", bye[1])
             
