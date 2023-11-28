@@ -53,7 +53,7 @@ Overall, our initial testing has been focused on the following:
 
 <img width="960" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/19a119e2-afe5-404d-a6dc-40d786a7befb">
 
-* Embed UX video
+A video demonstration of our UX can be found [here](https://drive.google.com/file/d/1elqtSeP41TXlPp4KMFpCNXAwldd3zthF/view?usp=sharing)
 
 ### Key risks & future work <a name="risks"></a>
 
