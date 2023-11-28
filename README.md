@@ -9,6 +9,7 @@
 * [Model testing](#testing)
 * [User experience](#ux)
 * [Key risks & future work](#risks)
+* [Meet our team](#team)
 
 ## Motivation <a name="motivation"></a>
 
@@ -61,6 +62,9 @@ Below is the summary of the key risks of ZenAI and enhancements that we'd like t
 
 <img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1294b4cf-f7fa-4586-b099-802c823f2d8a">
 
-
-
+## Meet our team <a name="team"></a>
+* Manish Kumar ([LinkedIn](https://www.linkedin.com/in/kmnis/))
+* Deepak Vanjani ([LinkedIn](https://www.linkedin.com/in/deepakvanjani/))
+* Puneet Modi ([LinkedIn](https://www.linkedin.com/in/puneet3modi/))
+* Danil Meresenchi ([LinkedIn](https://www.linkedin.com/in/dmeresenschi/))
 
