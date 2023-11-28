@@ -16,19 +16,23 @@
 &ensp;
 <img width="1118" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/110d42eb-a8df-4150-b8c3-af8be7e4766f">
 
+We built ZenAI to offer Sam and others in her shoes better access to mental health support.
+
 ## Overview of ZenAI <a name="introduction"></a>
 
 <img width="938" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/f0b3bec3-3de8-4e73-a5ea-af7922a8705b">
 
 ## Data <a name="data"></a>
 
-<img width="1108" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/39e739cc-6ab7-41bf-9997-849c68a12cf0">
+<img width="950" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/b4a0aa2d-b5d4-462c-980b-6c8ca69be2e9">
 
 Data and code for preparing the data code be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/data).
 
 ## Model training <a name="training"></a>
-* Additional details to come.
-* Model training code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/train).
+
+<img width="816" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/b13c51fb-a0d1-4908-bcd8-f324684382a5">
+
+Model training code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/train).
 
 ## Model inference <a name="inference"></a>
 
@@ -37,11 +41,13 @@ Data and code for preparing the data code be found [here](https://github.com/zen
 Model inference code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/main/inference).
 
 ## Model testing <a name="testing"></a>
-* Additional details to come.
 
-We tested our intent-detection classifier against 30 labeled prompts. The results are shown below and highlight that our model performs quite well. Supporting code can be found [here](https://github.com/zenn-ai/therapy-bot/blob/main/inference/bison_intent.ipynb).
+<img width="876" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/e624ce36-8004-4ef8-92a2-eaa84b78aed2">
 
-<img width="50%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1b43f3cc-dcca-4df5-88d2-3179a39a191d">
+Overall, our initial testing has been focused on the following:
+* Key quantitative metrics: Our model outperforms Llama 2 on key LLM metrics.
+* Intent detection evaluation: We tested our intent-detection classifier against 30 labeled prompts. The results are shown below and highlight that our model performs quite well. Supporting code can be found [here](https://github.com/zenn-ai/therapy-bot/blob/main/inference/bison_intent.ipynb).
+* Qualitative testing: We conducted extensive user testing of the chatbot. Snippets of Zen's responses are shown above and in our UX demo. We plan to roll out our testing to other target users and therapeutic experts. 
 
 ## User experience <a name="ux"></a>
 
@@ -50,9 +56,11 @@ We tested our intent-detection classifier against 30 labeled prompts. The result
 * Embed UX video
 
 ### Key risks & future work <a name="risks"></a>
+
+Below is the summary of the key risks of ZenAI and enhancements that we'd like to consider for the future. 
+
 <img width="100%" alt="image" src="https://github.com/zenn-ai/therapy-bot/assets/97678601/1294b4cf-f7fa-4586-b099-802c823f2d8a">
 
-### Team <a name="risks"></a>
 
 
 
