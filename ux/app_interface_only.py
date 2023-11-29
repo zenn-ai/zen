@@ -63,6 +63,7 @@ def get_chat_history(user_id):
 
 # Handle chat input and display using st.chat_message
 def handle_chat_input_with_st_chat_message(user_id):
+    '''Function to handle chat using the streamlit chat_message module'''
     if "messages" not in st.session_state:
         firebase_messages = get_chat_history(user_id)
         st.session_state.messages = [{"role": message['sender'], "content": message['message']} for message in firebase_messages]
@@ -90,7 +91,7 @@ def handle_chat_input_with_st_chat_message(user_id):
 
 # Text input styling
 def text_input_with_styling(label, value='', key=None, placeholder_color='white', text_color='white'):
-    # Custom CSS to include white color for text input and placeholder
+    '''Custom CSS to include white color for text input and placeholder'''
     st.markdown(f"""
     <style>
     input[type="text"]::placeholder {{
@@ -154,6 +155,7 @@ if tab == 'Chat' and 'user_id' in st.session_state:
     st.title('Chat with Zen')
     handle_chat_input_with_st_chat_message(st.session_state.user_id)
 
+# Chat History Logic
 elif tab == 'Conversation History' and 'user_id' in st.session_state:
     st.title('Your Conversation History')
     chat_history = get_chat_history(st.session_state.user_id)
@@ -166,19 +168,19 @@ elif tab == 'Conversation History' and 'user_id' in st.session_state:
     for date in sorted_dates:
         display_date = date.strftime(date_format)
         
-        with st.expander(display_date, expanded=False):
+        with st.expander(display_date, expanded=False): # embed the chat hitsory into partitioned expanding blocks
             for message in chat_history:
                 message_date = message['timestamp'].split(" ")[0]
                 if datetime.strptime(message_date, date_format) == date:
                     with st.chat_message(message['sender']):
                         st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1].split('.')[0]})")
 
-         # Clear Conversation History Button
+    # Clear Conversation History Button
     if st.button('Clear Conversation History'):
         clear_conversation_history(st.session_state.user_id)
         st.success('Conversation history cleared.')
         st.session_state.messages = []  # Clear local chat history
-        st.experimental_rerun()
+        st.experimental_rerun() # refresh the current page
         
 
 
