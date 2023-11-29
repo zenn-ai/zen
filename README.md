@@ -58,7 +58,7 @@ The UI/UX code can be found [here](https://github.com/zenn-ai/therapy-bot/tree/m
 
 A video demonstration of our UX can be found [here](https://drive.google.com/file/d/1elqtSeP41TXlPp4KMFpCNXAwldd3zthF/view?usp=sharing).
 
-### Key risks & future work <a name="risks"></a>
+## Key risks & future work <a name="risks"></a>
 
 Below is the summary of the key risks of ZenAI and enhancements that we'd like to consider for the future. 
 
