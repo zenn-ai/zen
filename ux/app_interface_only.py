@@ -2,17 +2,20 @@ import pyrebase # To install: pip install Pyerbase4
 import streamlit as st
 from datetime import datetime
 import random
+import os
 
+from dotenv import load_dotenv
+load_dotenv()
 
 # Configuration Key
 firebaseConfig = {
-    'apiKey': "AIzaSyBvAeBh-ghFe-4n9VSNTSW_h9zCT3bXngg",
-    'authDomain': "cloud-lab-ff59.firebaseapp.com",
-    'projectId': "cloud-lab-ff59",
-    'databaseURL': "https://cloud-lab-ff59-default-rtdb.firebaseio.com/",
-    'storageBucket': "cloud-lab-ff59.appspot.com",
-    'messagingSenderId': "1016159354336",
-    'appId': "1:1016159354336:web:862ea0d538eee01c11ff85",
+    'apiKey': os.getenv('API_KEY'),
+    'authDomain': os.getenv('AUTH_DOMAIN'),
+    'projectId': os.getenv('PROJECT_ID'),
+    'databaseURL': os.getenv('DATABASE_URL'),
+    'storageBucket': os.getenv('STORAGE_BUCKET'),
+    'messagingSenderId': os.getenv('MESSAGING_SENDER_ID'),
+    'appId': os.getenv('APP_ID'),
 }
 
 
