@@ -4,6 +4,7 @@ from datetime import datetime
 import random
 import os
 
+# Load the .env file with the Firebase authentication tokens 
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -105,7 +106,7 @@ def text_input_with_styling(label, value='', key=None, placeholder_color='white'
     return st.text_input(label, value=value, key=key)
 
 
-# Signup Logic
+### Signup Logic
 if tab == 'Sign up':
     email = text_input_with_styling('Please enter your email address', key='email_input')
     password = st.text_input('Please enter your password', type='password', key='login_password')
@@ -123,7 +124,7 @@ if tab == 'Sign up':
         st.session_state.messages = []  
 
 
-# Login Logic
+### Login Logic
 elif tab == 'Login':
     email = text_input_with_styling('Please enter your email address', key='email_input')
     password = st.text_input('Please enter your password', type='password', key='login_password')
@@ -150,12 +151,12 @@ if 'user_id' in st.session_state and 'user_handle' in st.session_state:
     st.sidebar.markdown(f"<h2 style='color:white;'>Welcome back, {st.session_state.user_handle}!</h2>", unsafe_allow_html=True)
 
 
-# Chat Logic
+### Chat Logic
 if tab == 'Chat' and 'user_id' in st.session_state:
     st.title('Chat with Zen')
     handle_chat_input_with_st_chat_message(st.session_state.user_id)
 
-# Chat History Logic
+### Chat History Logic
 elif tab == 'Conversation History' and 'user_id' in st.session_state:
     st.title('Your Conversation History')
     chat_history = get_chat_history(st.session_state.user_id)
