@@ -140,7 +140,7 @@ def load_model(model_path, num_gpus, base_model_path=None, max_gpu_memory=None):
 
 num_gpus = 4
 max_gpu_memory = "12GiB"
-model_path = "/home/jupyter/therapy-bot/models/Zen"
+model_path = "kmnis/Zen"
 model, tokenizer = load_model(model_path, num_gpus, max_gpu_memory=max_gpu_memory)
 
 
