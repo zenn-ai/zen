@@ -170,7 +170,7 @@ elif tab == 'Conversation History' and 'user_id' in st.session_state:
                 message_date = message['timestamp'].split(" ")[0]
                 if datetime.strptime(message_date, date_format) == date:
                     with st.chat_message(message['sender']):
-                        st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1].split(".")[0]})")
+                        st.markdown(f"{message['message']} ({message['timestamp'].split(' ')[1].split('.')[0]})")
 
     # Clear Conversation History Button
     if st.button('Clear Conversation History'):
