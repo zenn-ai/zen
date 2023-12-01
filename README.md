@@ -68,5 +68,5 @@ Below is the summary of the key risks of ZenAI and enhancements that we'd like t
 * Manish Kumar ([LinkedIn](https://www.linkedin.com/in/kmnis/))
 * Deepak Vanjani ([LinkedIn](https://www.linkedin.com/in/deepakvanjani/))
 * Puneet Modi ([LinkedIn](https://www.linkedin.com/in/puneet3modi/))
-* Danil Meresenchi ([LinkedIn](https://www.linkedin.com/in/dmeresenschi/))
+* Danil Meresenschi ([LinkedIn](https://www.linkedin.com/in/dmeresenschi/))
 

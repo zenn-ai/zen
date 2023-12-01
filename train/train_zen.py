@@ -32,7 +32,7 @@ load_dotenv("../.env")
 hf_token = os.getenv('HF_TOKEN')
 
 IGNORE_TOKEN_ID = LabelSmoother.ignore_index
-SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is Zen and you're an AI mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
 DATA_DIR = "../data"
 
