@@ -86,7 +86,7 @@ def create_vectorstore(documents):
 # Function to send message to Firebase
 def send_message(user_id, conv):
     for sender, message in conv:
-        now = datetime.now()
+        now = datetime.now(pytz.timezone('US/Central'))
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S.%f")
         message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
         db.child(user_id).child("Messages").push(message_data)
