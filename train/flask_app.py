@@ -26,6 +26,8 @@ from datetime import datetime
 from langchain.vectorstores import Qdrant
 from langchain.embeddings import HuggingFaceBgeEmbeddings
 
+import pytz
+
 warnings.filterwarnings('ignore')
 
 SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""

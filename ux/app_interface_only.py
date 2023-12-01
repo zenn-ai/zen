@@ -48,7 +48,7 @@ def clear_conversation_history(user_id):
 
 def send_message(user_id, message, sender):
     ''' Function to send message to Firebase with its designated timestamp '''
-    now = datetime.now()
+    now = datetime.now() 
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S") # format the datetime string
     message_data = {'message': message, 'timestamp': dt_string, 'sender': sender}
     db.child(user_id).child("Messages").push(message_data)
