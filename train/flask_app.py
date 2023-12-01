@@ -103,7 +103,7 @@ def get_chat_history(user_id):
     return conv
 
 
-def load_model(model_path, num_gpus, max_gpu_memory=None):
+def load_model(model_path, num_gpus, base_model_path=None, max_gpu_memory=None):
     
     kwargs = {"torch_dtype": torch.float16}
     if num_gpus != 1:
@@ -120,29 +120,28 @@ def load_model(model_path, num_gpus, max_gpu_memory=None):
         else:
             kwargs["max_memory"] = {i: max_gpu_memory for i in range(num_gpus)}
         
+    if base_model_path is None:
         config = PeftConfig.from_pretrained(model_path)
         base_model_path = config.base_model_name_or_path
-        tokenizer = AutoTokenizer.from_pretrained(
-            base_model_path, use_fast=False
-        )
-        base_model = AutoModelForCausalLM.from_pretrained(
-            base_model_path,
-            low_cpu_mem_usage=True,
-            **kwargs,
-        )
-        model = PeftModel.from_pretrained(base_model, model_path)
-        
-        return model, tokenizer, base_model
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        base_model_path, use_fast=False
+    )
+    model = AutoModelForCausalLM.from_pretrained(
+        base_model_path,
+        low_cpu_mem_usage=True,
+        **kwargs,
+    )
+    if base_model_path is None:
+        model = PeftModel.from_pretrained(model, model_path)
+
+    return model, tokenizer
 
 
-use_vicuna = False
 num_gpus = 4
 max_gpu_memory = "12GiB"
-model_path = "/home/jupyter/therapy-bot/models/ZenAI/"
-if use_vicuna:
-    _, tokenizer, model = load_model(model_path, num_gpus, max_gpu_memory)
-else:
-    model, tokenizer, _ = load_model(model_path, num_gpus, max_gpu_memory)
+model_path = "kmnis/Zen"
+model, tokenizer = load_model(model_path, num_gpus, max_gpu_memory=max_gpu_memory)
 
 
 def get_context(conv, question):
@@ -196,7 +195,6 @@ def chat_streamlit(
         "stop_token_ids": conv.stop_token_ids,
         "echo": False,
     }
-    print("---", prompt)
 
     output_stream = generate_stream(
         model,

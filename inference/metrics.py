@@ -119,7 +119,7 @@ def calculate_all_metrics(references, candidates, label):
     # Add ROUGE scores to the data dictionary
     for rouge_key, rouge_values in rouge_scores.items():
         for score_type, value in rouge_values.items():
-            data[f'{rouge_key.upper()}_{name_dict[score_type]}'] = [value]
+            data[f'{rouge_key.upper()}_{name_dict[score_type]}'] = [round(value * 100, 2)]
     # Create DataFrame
     data = pd.DataFrame(data)
     data["Model"] = label
