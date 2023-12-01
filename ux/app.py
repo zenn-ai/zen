@@ -110,14 +110,21 @@ if tab == 'Sign up':
 
     submit = st.button('Create my account')
     if submit:
-        user = auth.create_user_with_email_and_password(email, password)
-        st.success('Your account is created successfully! \n\n Please login to continue.')
-        st.balloons()
-        user = auth.sign_in_with_email_and_password(email, password)
-        db.child(user['localId']).child("Handle").set(handle)
-        db.child(user['localId']).child("ID").set(user['localId'])
-        st.session_state.user_id = user['localId']
-        st.session_state.messages = []  
+        try:
+            user = auth.create_user_with_email_and_password(email, password)
+            st.success('Your account is created successfully! \n\n Please login to continue.')
+            st.balloons()
+            # Sign in the user to set their handle and ID
+            user = auth.sign_in_with_email_and_password(email, password)
+            db.child(user['localId']).child("Handle").set(handle)
+            db.child(user['localId']).child("ID").set(user['localId'])
+            st.session_state.user_id = user['localId']
+            st.session_state.messages = []  
+        except Exception as e:
+            if "EMAIL_EXISTS" in str(e):
+                st.error('This email is already in use! Try a different address.')
+            else:
+                st.error('Wrong Credentials format.') 
 
 
 ### Login Logic
