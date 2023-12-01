@@ -36,7 +36,7 @@ SYSTEM_MSG = """Your name is Zen and you're an AI mental health counselor. Pleas
 
 # Load the .env file with the Firebase authentication tokens 
 from dotenv import load_dotenv
-load_dotenv('~/therapy-bot/ux/.env')
+load_dotenv('/home/jupyter/therapy-bot/ux/.env')
 
 # Configuration Key
 firebaseConfig = {
