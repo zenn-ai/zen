@@ -30,7 +30,7 @@ import pytz
 
 warnings.filterwarnings('ignore')
 
-SYSTEM_MSG = """Your name is Zen and you're a mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
+SYSTEM_MSG = """Your name is Zen and you're an AI mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
 # Configuration Key
 firebaseConfig = {
@@ -159,7 +159,7 @@ def chat_streamlit(
     model, tokenizer, user_id, question,
     device, num_gpus, max_gpu_memory,
     conv_template="Zen", system_msg=SYSTEM_MSG,
-    temperature=0.7, repetition_penalty=1.0, max_new_tokens=512,
+    temperature=0.0, repetition_penalty=1.0, max_new_tokens=512,
     dtype=torch.float16,
     judge_sent_end=True
 ):
