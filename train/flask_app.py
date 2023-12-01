@@ -27,21 +27,29 @@ from langchain.vectorstores import Qdrant
 from langchain.embeddings import HuggingFaceBgeEmbeddings
 
 import pytz
+import os
 
 warnings.filterwarnings('ignore')
 
 SYSTEM_MSG = """Your name is Zen and you're an AI mental health counselor. Please have a conversation with your patient and provide them with a helpful response to their concerns."""
 
+
+# Load the .env file with the Firebase authentication tokens 
+from dotenv import load_dotenv
+load_dotenv('~/therapy-bot/ux/.env')
+
 # Configuration Key
 firebaseConfig = {
-    'apiKey': "AIzaSyBvAeBh-ghFe-4n9VSNTSW_h9zCT3bXngg",
-    'authDomain': "cloud-lab-ff59.firebaseapp.com",
-    'projectId': "cloud-lab-ff59",
-    'databaseURL': "https://cloud-lab-ff59-default-rtdb.firebaseio.com/",
-    'storageBucket': "cloud-lab-ff59.appspot.com",
-    'messagingSenderId': "1016159354336",
-    'appId': "1:1016159354336:web:862ea0d538eee01c11ff85",
+    'apiKey': os.getenv('API_KEY'),
+    'authDomain': os.getenv('AUTH_DOMAIN'),
+    'projectId': os.getenv('PROJECT_ID'),
+    'databaseURL': os.getenv('DATABASE_URL'),
+    'storageBucket': os.getenv('STORAGE_BUCKET'),
+    'messagingSenderId': os.getenv('MESSAGING_SENDER_ID'),
+    'appId': os.getenv('APP_ID'),
 }
+
+
 # Firebase Authentication
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
