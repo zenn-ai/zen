@@ -38,6 +38,11 @@ div.row-widget.stRadio > div {
     display: flex;
     flex-direction: row;
 }
+
+.st-emotion-cache-1c7y2kd {
+        flex-direction: row-reverse;
+        text-align: right;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -54,7 +59,7 @@ def get_chat_history(user_id):
     ''' Fetch Conversation History from Firebase and sort in descending order of timestamp '''
     messages = db.child(user_id).child("Messages").get()
     chat_history = [{'message': message.val()['message'], 'timestamp': message.val()['timestamp'], 'sender': message.val()['sender']} for message in messages.each()] if messages.val() else []
-    sorted_chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S.%f"), reverse=True)
+    sorted_chat_history = sorted(chat_history, key=lambda x: datetime.strptime(x['timestamp'], "%d/%m/%Y %H:%M:%S.%f"), reverse=False)
     return sorted_chat_history
 
 
@@ -74,7 +79,7 @@ def handle_chat_input_with_st_chat_message(user_id):
     if user_input:
         with st.chat_message("user"):
             st.markdown(user_input)
-        api_url = "https://f0b3-34-173-16-97.ngrok-free.app/api/data"
+        api_url = "https://e20a-35-226-40-201.ngrok-free.app/api/data"
         
         with st.spinner(""):
             assistant_response = requests.post(api_url, json={"question": user_input, "user_id": user_id})
