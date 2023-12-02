@@ -175,6 +175,8 @@ def chat_streamlit(
     
     intent = zen_intent_classifer(question)
     if intent == 4:
+        conv.append_message(conv.roles[0], question)
+        conv.append_message(conv.roles[1], None)
         system_message = prompt_from_intent(intent)
         return conv, system_message
     
@@ -247,6 +249,9 @@ def get_data():
         num_gpus=4,
         max_gpu_memory="12GiB"
     )
+    
+    if isinstance(output_stream, str):
+        output_stream = [{"text": output_stream}]
     
     def generate():
         pre = 0
