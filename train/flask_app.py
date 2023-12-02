@@ -17,7 +17,7 @@ from fastchat.utils import get_gpu_memory, is_partial_stop, is_sentence_complete
 from fastchat.conversation import get_conv_template, register_conv_template, Conversation, SeparatorStyle
 from fastchat.serve.inference import generate_stream
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import streamlit as st
 
 import firebase as pyrebase
@@ -48,8 +48,6 @@ firebaseConfig = {
     'messagingSenderId': os.getenv('MESSAGING_SENDER_ID'),
     'appId': os.getenv('APP_ID'),
 }
-
-
 # Firebase Authentication
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
@@ -233,10 +231,13 @@ def stream_output(output_stream):
 
 app = Flask(__name__)
 
-def get_answer():
-    question = request.json.get("question", "")
-    user_id = request.json.get("user_id", "")
-    print("-----------------------------------------", question, "------------------------------------------")
+@app.route('/api/data', methods=["POST"])
+def get_data():
+    
+    data = request.json
+    question = data.get("question", "")
+    user_id = data.get("user_id", "")
+    
     conv, output_stream = chat_streamlit(
         model=model,
         tokenizer=tokenizer,
@@ -246,24 +247,31 @@ def get_answer():
         num_gpus=4,
         max_gpu_memory="12GiB"
     )
-    if isinstance(output_stream, str):
-        answer = output_stream
-    else:
-        answer = stream_output(output_stream).strip()
-    conv.update_last_message(answer)
     
     print("##############################################################################")
     print(conv.get_prompt())
     print("##############################################################################")
     
-    send_message(user_id, conv.messages[-2:])
-    return answer
-    
-
-@app.route('/api/data', methods=["POST"])
-def get_data():
-    answer = get_answer()
-    return jsonify({"answer": answer}), 200, {"Content-Type": "application/json"}
+    def generate():
+        pre = 0
+        for outputs in output_stream:
+            output_text = outputs["text"].strip().split(" ")
+            print("***", " ".join(output_text))
+            now = len(output_text) - 1
+            if now > pre:
+                text = " ".join(output_text[pre:now])
+                yield text.encode('utf-8')
+                print(pre, now, text)
+                pre = now
+                
+        remaining_text = " ".join(output_text[pre:])
+        if remaining_text:
+            yield remaining_text.encode('utf-8')
+        
+        conv.update_last_message(" ".join(output_text))
+        send_message(user_id, conv.messages[-2:])
+        
+    return Response(generate(), mimetype='text/event-stream')
 
 
 if __name__ == "__main__":

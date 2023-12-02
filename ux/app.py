@@ -40,8 +40,8 @@ div.row-widget.stRadio > div {
 }
 
 .st-emotion-cache-1c7y2kd {
-        flex-direction: row-reverse;
-        text-align: right;
+    flex-direction: row-reverse;
+    text-align: right;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -63,6 +63,34 @@ def get_chat_history(user_id):
     return sorted_chat_history
 
 
+# def stream_output(output_stream):
+#     pre = 0
+#     for outputs in output_stream:
+#         output_text = outputs["text"]
+#         output_text = output_text.strip().split(" ")
+#         now = len(output_text) - 1
+#         if now > pre:
+#             st.markdown(" ".join(output_text[pre:now]), end=" ")
+#             pre = now
+#     st.markdown(" ".join(output_text[pre:]))
+#     return " ".join(output_text)
+
+
+def stream_output(output_stream):
+    pre = 0
+    t = st.empty()
+    for outputs in output_stream:
+        output_text = outputs["text"]
+        output_text = output_text.strip().split(" ")
+        now = len(output_text) - 1
+        if now > pre:
+            t.write("%s" % " ".join(output_text[pre:now]))
+            pre = now
+    
+    reply = " ".join(output_text[pre:]).strip()
+    t.write("%s" % reply)
+
+
 # Handle chat input and display using st.chat_message
 def handle_chat_input_with_st_chat_message(user_id):
     '''Function to handle chat using the streamlit chat_message module'''
@@ -79,17 +107,25 @@ def handle_chat_input_with_st_chat_message(user_id):
     if user_input:
         with st.chat_message("user"):
             st.markdown(user_input)
-        api_url = "https://e20a-35-226-40-201.ngrok-free.app/api/data"
+        api_url = "https://922b-35-226-40-201.ngrok-free.app/api/data"
         
-        with st.spinner(""):
-            assistant_response = requests.post(api_url, json={"question": user_input, "user_id": user_id})
+        done = False
+        with st.chat_message("assistant"):
+            assistant_response = requests.post(api_url, json={"question": user_input, "user_id": user_id}, stream=True)
             if assistant_response.status_code == 200:
-                assistant_response = assistant_response.json()["answer"]
-                with st.chat_message("assistant"):
-                    st.markdown(assistant_response)
+                try:
+                    placeholder = st.empty()
+                    full_response = []
+                    for output_text in assistant_response:
+                        output_text = output_text.decode('utf-8').strip()
+                        full_response.append(output_text)
+                        placeholder.markdown(" ".join(full_response))
+                    placeholder.markdown(" ".join(full_response))
+                finally:
+                    assistant_response.close()
 
-                st.session_state.messages.append({"role": "user", "content": user_input})
-                st.session_state.messages.append({"role": "assistant", "content": assistant_response})
+            st.session_state.messages.append({"role": "user", "content": user_input})
+            st.session_state.messages.append({"role": "assistant", "content": " ".join(full_response)})
 
 
 # Text input styling
