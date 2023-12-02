@@ -63,34 +63,6 @@ def get_chat_history(user_id):
     return sorted_chat_history
 
 
-# def stream_output(output_stream):
-#     pre = 0
-#     for outputs in output_stream:
-#         output_text = outputs["text"]
-#         output_text = output_text.strip().split(" ")
-#         now = len(output_text) - 1
-#         if now > pre:
-#             st.markdown(" ".join(output_text[pre:now]), end=" ")
-#             pre = now
-#     st.markdown(" ".join(output_text[pre:]))
-#     return " ".join(output_text)
-
-
-def stream_output(output_stream):
-    pre = 0
-    t = st.empty()
-    for outputs in output_stream:
-        output_text = outputs["text"]
-        output_text = output_text.strip().split(" ")
-        now = len(output_text) - 1
-        if now > pre:
-            t.write("%s" % " ".join(output_text[pre:now]))
-            pre = now
-    
-    reply = " ".join(output_text[pre:]).strip()
-    t.write("%s" % reply)
-
-
 # Handle chat input and display using st.chat_message
 def handle_chat_input_with_st_chat_message(user_id):
     '''Function to handle chat using the streamlit chat_message module'''
