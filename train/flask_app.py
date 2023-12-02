@@ -248,20 +248,14 @@ def get_data():
         max_gpu_memory="12GiB"
     )
     
-    print("##############################################################################")
-    print(conv.get_prompt())
-    print("##############################################################################")
-    
     def generate():
         pre = 0
         for outputs in output_stream:
             output_text = outputs["text"].strip().split(" ")
-            print("***", " ".join(output_text))
             now = len(output_text) - 1
             if now > pre:
                 text = " ".join(output_text[pre:now])
                 yield text.encode('utf-8')
-                print(pre, now, text)
                 pre = now
                 
         remaining_text = " ".join(output_text[pre:])
@@ -270,6 +264,10 @@ def get_data():
         
         conv.update_last_message(" ".join(output_text))
         send_message(user_id, conv.messages[-2:])
+
+        print("##############################################################################")
+        print(conv.get_prompt())
+        print("##############################################################################")
         
     return Response(generate(), mimetype='text/event-stream')
 
